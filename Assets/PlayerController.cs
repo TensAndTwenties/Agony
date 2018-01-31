@@ -12,12 +12,14 @@ public class PlayerController : MonoBehaviour {
     private Vector3 currentPointerGeoTarget; // point on geo where aim currently is
     private GameObject currentPointerGeoTargetObject; // object where aim currently is 
     private RaycastHit pointerGeoDetectHit;
+    public PlayerFiringMode currentFiringMode = PlayerFiringMode.primary;
 
     private KeyCode previouslyPressed= 0;
 
     public float playerGrappleOffset; //when the player finished a grapple, how far away are they along the normal vector of impact target?
 
-    private GameObject grapplingHook;
+    private GameObject tether;
+    private GameObject tetherSecondary;
     private Vector3 playerTargetPosition = Vector3.zero; //cover currently aimed at
 
 
@@ -26,7 +28,8 @@ public class PlayerController : MonoBehaviour {
         directionPointer = GameObject.Find("DirectionPointer");
         levelController = GameObject.Find("LevelController");
         pointerTest = GameObject.Find("pointerTest");
-        grapplingHook = GameObject.Find("GrapplingHook");
+        tether = GameObject.Find("Tether");
+        tetherSecondary = GameObject.Find("TetherSecondary");
 
         this.transform.position = Vector3.zero;
     }
@@ -65,16 +68,26 @@ public class PlayerController : MonoBehaviour {
             
         }
         //pointerTest.transform.position = new Vector3(pointerGeoDetectHit.point.x, pointerGeoDetectHit.point.y, 0);
-        print("Hit - distance: " + pointerGeoDetectHit.distance + " PointerDirection: (" + currentPointerDirection.x + "," + currentPointerDirection.y + "," + currentPointerDirection.z + ")");
+        //print("Hit - distance: " + pointerGeoDetectHit.distance + " PointerDirection: (" + currentPointerDirection.x + "," + currentPointerDirection.y + "," + currentPointerDirection.z + ")");
         //print("Mouse: " + mousePos.x + "," + mousePos.y);
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) {
             previouslyPressed = KeyCode.Mouse1;
-            grapplingHook.GetComponent<GrapplingHookController>().FireGrapple(currentPointerGeoTarget, playerTargetPosition, currentPointerGeoTargetObject);
+            tether.GetComponent<TetherController>().FireGrapple(currentPointerGeoTarget, playerTargetPosition, currentPointerGeoTargetObject);
         }
         
         if (Input.GetKeyUp(KeyCode.Mouse1)) {
             previouslyPressed = 0;
         }
     }
+
+    public void ChangePlayerFiringMode(PlayerFiringMode mode) {
+        this.currentFiringMode = mode;
+
+        if (mode == PlayerFiringMode.secondTether) {
+            tetherSecondary.GetComponent<Renderer>().material.color = Color.red;
+        }
+    }
+
+    public enum PlayerFiringMode { primary, secondTether, grenade }// indicates change in UI/gameobjects due to firing status
 }

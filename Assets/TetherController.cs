@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GrapplingHookController: MonoBehaviour {
+public class TetherController: MonoBehaviour {
 
     public GrappleState currentState;
     public float grappleProjectileFiringSpeed;
@@ -10,6 +10,7 @@ public class GrapplingHookController: MonoBehaviour {
     public float grapplePlayerSpeed; //
     public float hookHeadOffsetFromBody; // how much is the grapple head offset from the player?
     public bool planted = false;
+    Rigidbody rb; 
 
     private GameObject parentObject; //when the grapple is idle, whats the parent transform object?
     private GameObject playerObject;
@@ -20,7 +21,7 @@ public class GrapplingHookController: MonoBehaviour {
 	void Awake() {        
         parentObject = GameObject.Find("DirectionPointer");
         playerObject = GameObject.Find("Player");
-
+        rb = GetComponent<Rigidbody>();
         ChangeState(GrappleState.idle);
     }
 	
@@ -29,6 +30,31 @@ public class GrapplingHookController: MonoBehaviour {
 	
 	}
 
+    void OnCollisionEnter(Collision other) {
+        if (currentState == GrappleState.firing)
+        {
+            if (other.gameObject.tag == "Cover")
+            {
+                Debug.Log("Hit Cover");
+
+                planted = true;
+                ChangeState(GrappleState.reeling);
+
+                Vector3 playerTargetPosition = other.gameObject.transform.position + (other.contacts[0].normal * playerObject.GetComponent<PlayerController>().playerGrappleOffset);
+                float playerTravelDistance = (playerTargetPosition - playerObject.transform.position).magnitude;
+
+                float playerTravelTime = playerTravelDistance / grapplePlayerSpeed;
+
+                var seq = LeanTween.sequence();
+                seq.append(LeanTween.move(playerObject, playerTargetPosition, playerTravelTime).setEase(LeanTweenType.easeInQuad));
+                seq.append(() =>
+                {
+                    ChangeState(GrappleState.idle);
+                });
+            }
+        }
+    }
+    
     public void FireGrapple(Vector3 target, Vector3 playerTarget, GameObject targetCoverObject)
     {
 
@@ -41,6 +67,10 @@ public class GrapplingHookController: MonoBehaviour {
             float grappleHeadTravelTime = grappleHeadTravelDistance / grappleProjectileFiringSpeed;
 
             ChangeState(GrappleState.firing);
+
+            LeanTween.move(this.gameObject, target, grappleHeadTravelTime);
+
+            /*
             var seq = LeanTween.sequence();
             seq.append(LeanTween.move(this.gameObject, target, grappleHeadTravelTime));
             seq.append(() =>
@@ -57,6 +87,7 @@ public class GrapplingHookController: MonoBehaviour {
             {
                 playerObject.GetComponent<PlayerController>().currentCoverObject = targetCoverObject;
             });
+            */ 
         }
         else if (currentState == GrappleState.firing || currentState == GrappleState.reeling) {
             //RETRACT
@@ -95,11 +126,16 @@ public class GrapplingHookController: MonoBehaviour {
         if (targetState == GrappleState.firing)
         {
             this.gameObject.transform.parent = null;
+            rb.isKinematic = false;
         }
-        else if (targetState == GrappleState.idle) {
+        else if (targetState == GrappleState.idle)
+        {
             this.gameObject.transform.parent = parentObject.transform;
             this.gameObject.transform.localPosition = new Vector3(0 + hookHeadOffsetFromBody, 0, 0);
             this.planted = false;
+        }
+        else {
+            rb.isKinematic = true;
         }
 
         currentState = targetState;
