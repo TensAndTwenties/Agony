@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agony.Plugins", "Agony.Plugins.csproj", "{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agony", "Agony.csproj", "{35DD3BE4-9D81-EF4D-CD0F-B2B2AB677EE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agony.Plugins", "Agony.Plugins.csproj", "{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agony.Editor", "Agony.Editor.csproj", "{44257C02-8A00-8DD5-6924-6627E48357C8}"
 EndProject
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{35DD3BE4-9D81-EF4D-CD0F-B2B2AB677EE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{35DD3BE4-9D81-EF4D-CD0F-B2B2AB677EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35DD3BE4-9D81-EF4D-CD0F-B2B2AB677EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35DD3BE4-9D81-EF4D-CD0F-B2B2AB677EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C38868DF-B5A6-9AB3-24C5-E86C55F3FBD1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{44257C02-8A00-8DD5-6924-6627E48357C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{44257C02-8A00-8DD5-6924-6627E48357C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44257C02-8A00-8DD5-6924-6627E48357C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
