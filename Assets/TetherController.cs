@@ -10,6 +10,7 @@ public class TetherController: MonoBehaviour {
     public float grapplePlayerSpeed; //
     public float hookHeadOffsetFromBody; // how much is the grapple head offset from the player?
     public bool planted = false;
+    public bool secondaryTetherActivated = false; // whether the secondary function has been enacted or not.
     Rigidbody rb; 
 
     private GameObject parentObject; //when the grapple is idle, whats the parent transform object?
@@ -31,26 +32,32 @@ public class TetherController: MonoBehaviour {
 	}
 
     void OnCollisionEnter(Collision other) {
-        if (currentState == GrappleState.firing)
+        if (currentState == GrappleState.firing && playerObject.GetComponent<PlayerController>().fireHeldTime == 0)
         {
             if (other.gameObject.tag == "Cover")
             {
-                Debug.Log("Hit Cover");
+                //Debug.Log("Hit Cover");
 
                 planted = true;
-                ChangeState(GrappleState.reeling);
 
-                Vector3 playerTargetPosition = other.gameObject.transform.position + (other.contacts[0].normal * playerObject.GetComponent<PlayerController>().playerGrappleOffset);
-                float playerTravelDistance = (playerTargetPosition - playerObject.transform.position).magnitude;
+                if (secondaryTetherActivated) {
 
-                float playerTravelTime = playerTravelDistance / grapplePlayerSpeed;
 
-                var seq = LeanTween.sequence();
-                seq.append(LeanTween.move(playerObject, playerTargetPosition, playerTravelTime).setEase(LeanTweenType.easeInQuad));
-                seq.append(() =>
-                {
-                    ChangeState(GrappleState.idle);
-                });
+                } else {
+                    ChangeState(GrappleState.reeling);
+
+                    Vector3 playerTargetPosition = other.gameObject.transform.position + (other.contacts[0].normal * playerObject.GetComponent<PlayerController>().playerGrappleOffset);
+                    float playerTravelDistance = (playerTargetPosition - playerObject.transform.position).magnitude;
+
+                    float playerTravelTime = playerTravelDistance / grapplePlayerSpeed;
+
+                    var seq = LeanTween.sequence();
+                    seq.append(LeanTween.move(playerObject, playerTargetPosition, playerTravelTime).setEase(LeanTweenType.easeInQuad));
+                    seq.append(() =>
+                    {
+                        ChangeState(GrappleState.idle);
+                    });
+                }
             }
         }
     }
